@@ -10,12 +10,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseInMemoryDatabase("Authentication");
 });
 
+builder.Services.AddScoped<IApplicationDBContext, ApplicationDBContext>();
+builder.Services.AddScoped<ApplicationDBContextInitializer>();
+var app = builder.Build();
+
+var scope = app.Services.CreateScope();
+await scope.ServiceProvider.GetRequiredService<ApplicationDBContextInitializer>().SeedDataAsync();
+scope.Dispose();
 
 // Configure the HTTP request pipeline.a
 if (app.Environment.IsDevelopment())
@@ -31,3 +37,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
