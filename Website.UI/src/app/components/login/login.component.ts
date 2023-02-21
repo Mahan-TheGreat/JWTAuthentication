@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { enviroment } from 'src/enviroments/enviroment';
 
@@ -9,8 +10,14 @@ import { enviroment } from 'src/enviroments/enviroment';
 })
 export class LoginComponent implements OnInit{
 
-  private baseUrl = enviroment.baseApiUrl;
   private _authenticationService!: AuthenticationService;
+  
+  loginUserForm = new FormGroup({
+    username: new FormControl('',[Validators.required]),
+    password: new FormControl('',[Validators.required])
+
+  })
+
   constructor(authenticationService : AuthenticationService){
     this._authenticationService = authenticationService;
   }
@@ -20,11 +27,12 @@ export class LoginComponent implements OnInit{
   }
 
     getUsers(){
-      console.log(`${this.baseUrl}User`);
       this._authenticationService.getUsers()
         .subscribe({
           next: res=> console.log(res)
       })
     }
+
+
   
 }

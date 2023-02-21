@@ -6,14 +6,24 @@ import { AppComponent } from './app.component';
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './components/login/login.component';
 
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import { RegisterComponent } from './components/register/register.component';
+import { AppRoutingModule } from './app.routing.module';
+
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule,
+    InputTextModule,
+    ButtonModule,
+
   ],
   providers: [
     AuthenticationService
