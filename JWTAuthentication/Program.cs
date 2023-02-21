@@ -23,6 +23,14 @@ var scope = app.Services.CreateScope();
 await scope.ServiceProvider.GetRequiredService<ApplicationDBContextInitializer>().SeedDataAsync();
 scope.Dispose();
 
+app.UseCors(builder=>
+{
+    builder.WithOrigins("http://localhost:4200")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .WithExposedHeaders("X-Pagination");
+});
+
 // Configure the HTTP request pipeline.a
 if (app.Environment.IsDevelopment())
 {
