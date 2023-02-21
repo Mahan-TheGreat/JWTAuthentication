@@ -13,6 +13,6 @@ public class ApplicationDBContext: DbContext, IApplicationDBContext
     public ApplicationDBContext(DbContextOptions options) : base(options)
     { }
 
-    public DbSet<User> Users => Set <User>();
+    public DbSet<User> Users => Set<User>();
 
 }

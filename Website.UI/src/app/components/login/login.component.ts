@@ -18,6 +18,14 @@ export class LoginComponent implements OnInit{
 
   })
 
+  get Username(){
+    return this.loginUserForm.get('username');
+  }
+
+  get Password(){
+    return this.loginUserForm.get('password');
+  }
+
   constructor(authenticationService : AuthenticationService){
     this._authenticationService = authenticationService;
   }
@@ -31,6 +39,14 @@ export class LoginComponent implements OnInit{
         .subscribe({
           next: res=> console.log(res)
       })
+    }
+
+    loginUser(){
+      if(this.Username?.value?.trim() == '' || this.Password?.value?.trim() ==''){
+        alert("Error! Username or Password can not be empty.");
+        return;
+      }
+      console.log(this.loginUserForm.value)
     }
 
 

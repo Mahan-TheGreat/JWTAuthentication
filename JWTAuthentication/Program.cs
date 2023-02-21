@@ -1,4 +1,6 @@
+using JWTAuthentication.Entities;
 using JWTAuthentication.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,12 +18,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.AddScoped<IApplicationDBContext, ApplicationDBContext>();
-builder.Services.AddScoped<ApplicationDBContextInitializer>();
+
+
 var app = builder.Build();
 
-var scope = app.Services.CreateScope();
-await scope.ServiceProvider.GetRequiredService<ApplicationDBContextInitializer>().SeedDataAsync();
-scope.Dispose();
+
 
 app.UseCors(builder=>
 {
@@ -37,6 +38,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

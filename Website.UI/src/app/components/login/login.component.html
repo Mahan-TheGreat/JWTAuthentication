@@ -1,20 +1,25 @@
 
-<form id="loginForm">
+<ng-container id="loginForm" [formGroup]="loginUserForm" >
     <div class="align-center">
         <h3>Sign In</h3>
     </div>
     <div class="p-inputgroup inputGroup" >
         <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-        <input type="text" pInputText placeholder="Username">         
+        <input type="text" pInputText placeholder="Username" formControlName="username">   
+        <small class="p-error" *ngIf="Username!.invalid && Username!.dirty">Username is required.</small>
+      
     </div>
+    <small class="p-error" *ngIf="Username!.invalid && Username!.dirty">Username is required.</small>
+
     <div class="p-inputgroup inputGroup" >
         <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
-        <input type="password" pInputText placeholder="Password">         
+        <input type="password" pInputText placeholder="Password" formControlName="password">  
+        <small class="p-error" *ngIf="Password!.invalid && Password!.dirty">Password is required.</small>       
     </div>
     <div class="inputGroup align-center">
-        <button pButton type="button" label="Login" ></button>  
+        <button pButton type="button" label="Login" (click)="loginUser()"></button>  
     </div>
     <div class="align-center">
         <p>Not a Member? <a href="/register">Sign Up</a></p>
     </div>
-</form>
+</ng-container>
