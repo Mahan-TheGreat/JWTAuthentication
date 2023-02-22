@@ -12,12 +12,16 @@ import { RegisterComponent } from './components/register/register.component';
 import { AppRoutingModule } from './app.routing.module';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AdmindashboardComponent } from './components/admindashboard/admindashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    DashboardComponent,
+    AdmindashboardComponent
   ],
   imports: [
     BrowserModule,
