@@ -1,4 +1,5 @@
 ﻿using JWTAuthentication.Entities;
+using JWTAuthentication.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWTAuthentication.Infrastructure;
@@ -14,5 +15,6 @@ public class ApplicationDBContext: DbContext, IApplicationDBContext
     { }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Superhero> Superheroes => Set<Superhero>();
 
 }

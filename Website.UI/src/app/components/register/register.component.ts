@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RegisterUser } from 'src/app/interface/registerUser.interface';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +9,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+
+  private _authenticationService!: AuthenticationService;
 
   errorFirstName = false;
   errorLastName = false;
@@ -44,6 +48,10 @@ export class RegisterComponent {
   }
   get ConfirmPassword(){
     return this.registerUserForm.get('confirmPassword');
+  }
+ 
+  constructor(authenticationService: AuthenticationService){
+    this._authenticationService= authenticationService;
   }
 
   private checkNull(){
@@ -97,6 +105,23 @@ export class RegisterComponent {
     if(this.checkNull() || this.matchPassword() || this.checkPasswordLength()){
       return;
     }
+    let user: RegisterUser = {
+      firstName: this.registerUserForm.value.firstName!,
+      lastName: this.registerUserForm.value.lastName!,
+      email: this.registerUserForm.value.email!,
+      username: this.registerUserForm.value.username!,
+      password: this.registerUserForm.value.password!,
+      confirmPassword: this.registerUserForm.value.confirmPassword!
+    }
+    this._authenticationService.registerUser(user)
+        .subscribe({
+          next: res=> {
+            alert("User registered successfully.");
+          },
+          error: err=>{
+            alert("Something went wrong. Please Try again.");
+          }
+        })
   }
 
 }

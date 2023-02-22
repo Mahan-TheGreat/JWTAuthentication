@@ -3,7 +3,9 @@ using JWTAuthentication.Infrastructure;
 using JWTAuthentication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace JWTAuthentication.Controllers;
@@ -14,12 +16,14 @@ namespace JWTAuthentication.Controllers;
 public class UserController : ControllerBase
 {
     private ApplicationDBContext _Context;
+    private IConfiguration _configuration;
 
 
-    public UserController(ApplicationDBContext Context)
+    public UserController(ApplicationDBContext Context, IConfiguration configuration)
     {
 
         _Context = Context;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -45,12 +49,12 @@ public class UserController : ControllerBase
             Email = user.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
-            VerificationToken = CreateToken()
-
+            VerificationToken = CreateRandomToken()
         };
 
         _Context.Users.Add(registerUser);
         await _Context.SaveChangesAsync();
+        await VerifyUser(registerUser.VerificationToken);
 
         return Ok(new
         {
@@ -61,7 +65,7 @@ public class UserController : ControllerBase
 
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(UserLoginDTO request)
+    public async Task<ActionResult<string>> Login(UserLoginDTO request)
     {
 
         var user = await _Context.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
@@ -69,23 +73,17 @@ public class UserController : ControllerBase
         {
             return BadRequest("User not Found!");
         }
-        if (user.VerifiedAt == null )
-        {
-            return BadRequest("User not Verified!");
-        }
         if (!VerifyPasswordHash(request.Password,user.PasswordHash, user.PasswordSalt))
         {
             return BadRequest("Password do not match.");
         }
-        return Ok(new
-        {
-            Message = "User login successfull."
-        }); 
+        string token = CreateJwtToken(user);
+        return Ok(token);
 
     }
 
-    [HttpPost("verify")]
-    public async Task<IActionResult> Verify(string token)
+
+    private async Task<IActionResult> VerifyUser(string token)
     {
 
         var user = await _Context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
@@ -93,9 +91,9 @@ public class UserController : ControllerBase
         {
             return BadRequest("Invalid Token!");
         }
-        user.VerifiedAt= DateTime.Now;
+        user.VerifiedAt = DateTime.Now;
         await _Context.SaveChangesAsync();
-    
+
         return Ok(new
         {
             Message = "User Verified."
@@ -112,7 +110,7 @@ public class UserController : ControllerBase
         {
             return BadRequest("User not found!");
         }
-        user.PasswordResetToken = CreateToken();
+        user.PasswordResetToken = CreateRandomToken();
         user.ResetTokenExpires = DateTime.Now.AddHours(1);
         await _Context.SaveChangesAsync();
 
@@ -170,7 +168,48 @@ public class UserController : ControllerBase
         }
     }
 
-    private string CreateToken()
+    private string CreateJwtToken(User user)
+    {
+        //List<Claim> claims = new List<Claim>
+        //{
+        //    new Claim(ClaimTypes.Name, user.UserName),
+        //    new Claim("aud", "https://localhost:7130")
+        //};
+
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+            _configuration.GetSection("AppSettings:Token").Value));
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(ClaimTypes.Name, user.UserName),
+                 new Claim("aud","http://localhost:7130"),
+                 new Claim("aud","http://localhost:4200"),
+                 
+            }),
+            Issuer = "https://localhost:7130",
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature)
+    };
+
+        //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        //var token = new JwtSecurityToken(
+        //        claims: claims,
+        //        expires: DateTime.Now.AddDays(1),
+        //        signingCredentials: creds
+        //    );
+        var jwt = tokenHandler.WriteToken(token);
+
+        return jwt;
+
+    }
+
+    private string CreateRandomToken()
     {
         return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
     }

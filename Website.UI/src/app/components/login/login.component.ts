@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoginUser } from 'src/app/interface/loginUser.interface';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
@@ -28,7 +30,10 @@ export class LoginComponent{
     return this.loginUserForm.get('password');
   }
 
-  constructor(authenticationService : AuthenticationService){
+  constructor(
+     authenticationService : AuthenticationService,
+     private router: Router
+    ){
     this._authenticationService = authenticationService;
   }
   
@@ -44,14 +49,26 @@ export class LoginComponent{
     }
     return isNull;
   }
-    loginUser(){
-    
-      if(this.checkNull()){
-        return;
-      }
-      console.log(this.loginUserForm.value)
+  loginUser(){
+    if(this.checkNull()){
+      return;
     }
-
+    let user: LoginUser = {
+      username: this.loginUserForm.value.username!,
+      password: this.loginUserForm.value.password!,
+    }
+    this._authenticationService.loginUser(user)
+        .subscribe({
+          next: res=> {
+            alert("Login successfully.");
+            this.router.navigate(['/dashboard']);
+          },
+          error: err=>{
+            console.log(err);
+            alert("Error! " + err.error);
+          }
+        })
+  }
 
   
 }

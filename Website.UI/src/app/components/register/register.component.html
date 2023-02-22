@@ -33,7 +33,7 @@
     </div>
     <div class="p-inputgroup inputGroup" >
         <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
-        <input type="text" pInputText placeholder="Confirm Password" formControlName="confirmPassword">      
+        <input type="password" pInputText placeholder="Confirm Password" formControlName="confirmPassword">      
         <small class="p-error errorText" *ngIf="ConfirmPassword!.invalid && ConfirmPassword!.dirty || errorConfirmPassword">Confirm Password is required.!</small>
         <small class="p-error errorText" *ngIf="errorMatchPassword"> Passwords do not match!</small>
 
@@ -43,6 +43,6 @@
         <button pButton type="button" label="Sign Up" (click)="registerUser()" ></button>  
     </div>
     <div class="align-center">
-        <p>Already a Member? <a href="/login">Sign In</a></p>
+        <p>Already a Member? <a routerLink="/login">Sign In</a></p>
     </div>
 </form>
