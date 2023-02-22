@@ -15,3 +15,4 @@
 *.cache
 /JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.pdb
 /JWTAuthentication/obj/Debug/net6.0/staticwebassets.build.json
+/Website.UI/obj/Debug
