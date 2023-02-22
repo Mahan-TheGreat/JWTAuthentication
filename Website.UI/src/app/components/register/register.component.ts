@@ -8,12 +8,95 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterComponent {
 
+  errorFirstName = false;
+  errorLastName = false;
+  errorEmail = false;
+  errorUsername = false;
+  errorPassword = false;
+  errorConfirmPassword = false;
+  errorMatchPassword = false;
+  errorLengthPassword = false;
+
   registerUserForm = new FormGroup({
     firstName: new FormControl('',[Validators.required]),
     lastName: new FormControl('',[Validators.required]),
-    email: new FormControl('',[Validators.required]),
-    password: new FormControl('',[Validators.required]),
-    confirmPassword: new FormControl('',[Validators.required])
+    username: new FormControl('',[Validators.required]),
+    email: new FormControl('',[Validators.required,Validators.email]),
+    password: new FormControl('',[Validators.required, Validators.minLength(6)]),
+    confirmPassword: new FormControl('',[Validators.required,Validators.minLength(6)])
   })
+
+
+  get FirstName(){
+    return this.registerUserForm.get('firstName');
+  }
+  get LastName(){
+    return this.registerUserForm.get('lastName');
+  }
+  get Email(){
+    return this.registerUserForm.get('email');
+  }
+  get UserName(){
+    return this.registerUserForm.get('username');
+  }
+  get Password(){
+    return this.registerUserForm.get('password');
+  }
+  get ConfirmPassword(){
+    return this.registerUserForm.get('confirmPassword');
+  }
+
+  private checkNull(){
+    var isNull = false;
+    if(this.FirstName?.value?.trim()==''){
+      isNull = true;
+      this.errorFirstName = true;
+    }
+    if(this.LastName?.value?.trim()==''){
+      isNull = true;
+      this.errorLastName = true;
+    }
+    if(this.UserName?.value?.trim()==''){
+      isNull = true;
+      this.errorUsername = true;
+    }
+    if(this.Email?.value?.trim()==''){
+      isNull = true;
+      this.errorEmail = true;
+    }
+    if(this.Password?.value?.trim()==''){
+      isNull = true;
+      this.errorPassword = true;
+    } 
+    if(this.ConfirmPassword?.value?.trim()==''){
+      isNull = true;
+      this.errorConfirmPassword = true;
+    }
+    return isNull;
+  }
+
+  matchPassword(){
+    if(this.Password?.value?.trim()==this.ConfirmPassword?.value?.trim()){
+      return false;
+    }else{
+      this.errorMatchPassword = true;
+      return true;
+    }
+  }
+
+  checkPasswordLength(){
+    if(this.Password!.value!.trim().length < 6){
+      this.errorLengthPassword = true;
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  registerUser(){
+    if(this.checkNull() || this.matchPassword() || this.checkPasswordLength()){
+      return;
+    }
+  }
 
 }

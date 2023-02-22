@@ -30,3 +30,10 @@
 .inputGroup{
     margin-top: 2em;
 }
+
+.errorText{
+    font-size: 1em;
+    margin-left:0.5em;
+    text-align: center;
+    align-self: center;
+}
