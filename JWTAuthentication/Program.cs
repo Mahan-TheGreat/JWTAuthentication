@@ -1,4 +1,5 @@
 using JWTAuthentication.Infrastructure;
+using JWTAuthentication.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -21,8 +22,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<IApplicationDBContext, ApplicationDBContext>();
 builder.Services.AddScoped<ApplicationDBInitializer>();
+builder.Services.AddScoped<IUserService, UserService>();
 
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2",new OpenApiSecurityScheme

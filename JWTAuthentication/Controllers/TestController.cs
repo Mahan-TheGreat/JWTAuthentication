@@ -21,5 +21,14 @@ namespace JWTAuthentication.Controllers
         {
             return await _context.Superheroes.ToListAsync();
         }
+
+        [HttpPost("Superheroes"), Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> PostSuperheroes(Superhero hero)
+        {
+            _context.Superheroes.Add(hero);
+            await _context.SaveChangesAsync();
+            return Ok(hero);
+        }
     }
 }
