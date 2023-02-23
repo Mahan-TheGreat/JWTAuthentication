@@ -1,27 +1,9 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿# Ignore Visual Studio files
+.vs/
 
-/JWTAuthentication/bin/Debug/net6.0
-/JWTAuthentication/obj/Debug/net6.0/staticwebassets
-/.vs/JWTAuthentication
-/JWTAuthentication/obj/Debug/net6.0/ref
-/JWTAuthentication/obj/Debug/net6.0/refint
-*.exe
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.assets.cache
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.csproj.CopyComplete
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.dll
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.GeneratedMSBuildEditorConfig.editorconfig
-*.cache
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.pdb
-/JWTAuthentication/obj/Debug/net6.0/staticwebassets.build.json
+# Ignore obj directory
+/JWTAuthentication/obj/
+/JWTAuthentication/bin/
 /Website.UI/obj/Debug
-/.vs/JWTAuthentication/DesignTimeBuild/.dtbcache.v2
-/.vs/JWTAuthentication/v17/.suo
-/.vs/ProjectEvaluation/jwtauthentication.metadata.v5.2
-/.vs/ProjectEvaluation/jwtauthentication.projects.v5.2
-/JWTAuthentication/obj/Debug/net6.0/JWTAuthentication.csproj.AssemblyReference.cache
-/JWTAuthentication/obj/JWTAuthentication.csproj.nuget.dgspec.json
-/JWTAuthentication/obj/JWTAuthentication.csproj.nuget.g.props
-/JWTAuthentication/obj/project.assets.json
-/JWTAuthentication/obj/project.nuget.cache
+/JWTAuthentication/DesignTimeBuild
+

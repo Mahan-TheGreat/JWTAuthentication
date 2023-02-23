@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Practice\\Authentication&Authorization\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj": {}
+    "D:\\Practice\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj": {}
   },
   "projects": {
-    "D:\\Practice\\Authentication&Authorization\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj": {
+    "D:\\Practice\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Practice\\Authentication&Authorization\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj",
+        "projectUniqueName": "D:\\Practice\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj",
         "projectName": "JWTAuthentication",
-        "projectPath": "D:\\Practice\\Authentication&Authorization\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj",
+        "projectPath": "D:\\Practice\\JWTAuthentication\\JWTAuthentication\\JWTAuthentication.csproj",
         "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "D:\\Practice\\Authentication&Authorization\\JWTAuthentication\\JWTAuthentication\\obj\\",
+        "outputPath": "D:\\Practice\\JWTAuthentication\\JWTAuthentication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,13 +40,43 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Cors": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[6.0.0, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.27.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             }
           },
           "imports": [
