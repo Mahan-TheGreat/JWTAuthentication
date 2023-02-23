@@ -1,2 +1,5 @@
-﻿.vs/*
-obj/
+﻿#Ignore Visual studio files
+.vs/
+
+#Ignore obj directory
+.obj/
