@@ -1,7 +1,0 @@
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.csproj.AssemblyReference.cache
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.GeneratedMSBuildEditorConfig.editorconfig
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.AssemblyInfoInputs.cache
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.AssemblyInfo.cs
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.csproj.CoreCompileInputs.cache
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.MvcApplicationPartsAssemblyInfo.cs
-D:\Practice\Authentication&Authorization\JWTAuthentication\JWTAuthentication\obj\Debug\net6.0\JWTAuthentication.MvcApplicationPartsAssemblyInfo.cache
