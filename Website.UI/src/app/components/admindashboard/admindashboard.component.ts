@@ -7,13 +7,21 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./admindashboard.component.css']
 })
 export class AdmindashboardComponent {
+
+  username: string = '';
   constructor(private _authenticationService: AuthenticationService){
-      this.checkLogin();
+    this.setUserName();
   }
 
-  checkLogin(){
-    let loginStatus = this._authenticationService.isLoggedIn();
-    let isAdmin = this._authenticationService.isAdmin();      
-    }
-  
+  setUserName(){
+    this._authenticationService.getUserName()
+      .subscribe({
+        next: res=> this.username = res,
+        error:err=> {
+          alert("Something went wrong. Please check the console.");
+          console.log(err);
+        }
+      })
+  }
+
 }

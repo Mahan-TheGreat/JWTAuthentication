@@ -109,6 +109,7 @@ export class RegisterComponent {
       firstName: this.registerUserForm.value.firstName!,
       lastName: this.registerUserForm.value.lastName!,
       email: this.registerUserForm.value.email!,
+      userRole: "Admin",
       username: this.registerUserForm.value.username!,
       password: this.registerUserForm.value.password!,
       confirmPassword: this.registerUserForm.value.confirmPassword!

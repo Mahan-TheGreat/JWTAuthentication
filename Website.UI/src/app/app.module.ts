@@ -16,6 +16,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AuthInterceptor } from './services/Auth.Interceptor';
+import { AuthGuard } from './services/AuthGuard';
+import { AdminAuthGuard } from './services/AdminAuthGuard';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { AuthInterceptor } from './services/Auth.Interceptor';
   providers: [
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    AuthGuard,
+    AdminAuthGuard
   ],
   bootstrap: [AppComponent]
 })

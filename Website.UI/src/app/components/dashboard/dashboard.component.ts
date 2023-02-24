@@ -10,12 +10,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class DashboardComponent {
 
   constructor(private _router: Router, private _authenticationService: AuthenticationService){
-        this.validateUserLogin();
   }
-  validateUserLogin(){
-    let loginStatus = this._authenticationService.isLoggedIn();
-    if(!loginStatus){
-      this._router.navigate(['/login']);
-    }
-  }
+
 }

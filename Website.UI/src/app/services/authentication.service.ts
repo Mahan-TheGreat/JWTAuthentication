@@ -41,28 +41,28 @@ export class AuthenticationService{
         let token = sessionStorage.getItem('authToken');
         if(token){
             isLoggedIn = true;
-        }else{
-            this._router.navigate(['/login'])
         }
         return isLoggedIn;
     }
 
     isAdmin(){
         let isAdmin = false;
-        this.getUserRole().subscribe({
+         this.getUserRole().subscribe({
             next: res => {
-                if(res == 'Admin'){
+                   if(res=='Admin'){
                     isAdmin = true;
-                }else{
-                    this._router.navigate(['/dashboard']);
-                }
+                   }      
+                   return isAdmin;
+    
             },
             error: err => {
                 alert("Something wen wrong! Please check the console.");
                 this._router.navigate(['/dashboard']);
                 console.log(err);
+                
             }
         })
         return isAdmin;
+
     }
 }
