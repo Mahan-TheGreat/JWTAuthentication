@@ -61,10 +61,10 @@ export class LoginComponent{
         .subscribe({
           next: res=> {
             alert("Login successfully.");
+            sessionStorage.setItem('authToken', res);
             this.router.navigate(['/dashboard']);
           },
           error: err=>{
-            console.log(err);
             alert("Error! " + err.error);
           }
         })

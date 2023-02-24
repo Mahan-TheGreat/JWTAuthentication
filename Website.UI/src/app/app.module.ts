@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
@@ -15,6 +15,7 @@ import { AdmindashboardComponent } from './components/admindashboard/admindashbo
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { AuthInterceptor } from './services/Auth.Interceptor';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { NgModule } from '@angular/core';
     ButtonModule
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
