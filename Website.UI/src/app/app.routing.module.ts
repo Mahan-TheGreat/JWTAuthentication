@@ -6,11 +6,12 @@ import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { AdminAuthGuard } from "./services/AdminAuthGuard";
 import { AuthGuard } from "./services/AuthGuard";
+import { LoginGuard } from "./services/LoginGuard";
 
  const routes: Routes = [
    {path:'', redirectTo:'login', pathMatch:'full'},
-   { path: 'login', component: LoginComponent},
-   {path:'register', component: RegisterComponent},
+   { path: 'login', component: LoginComponent, canActivate:[LoginGuard]},
+   {path:'register', component: RegisterComponent, canActivate:[LoginGuard]},
    {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
    {path:'admin', component: AdmindashboardComponent, canActivate:[AdminAuthGuard], data: {requiredRoles: 'Admin'}},
    { path: '**', redirectTo: 'login', pathMatch: "full" }
