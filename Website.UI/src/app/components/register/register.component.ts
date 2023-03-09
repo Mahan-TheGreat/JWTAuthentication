@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RegisterUser } from 'src/app/interface/registerUser.interface';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
@@ -9,9 +10,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-
-  private _authenticationService!: AuthenticationService;
-
   errorFirstName = false;
   errorLastName = false;
   errorEmail = false;
@@ -50,9 +48,7 @@ export class RegisterComponent {
     return this.registerUserForm.get('confirmPassword');
   }
  
-  constructor(authenticationService: AuthenticationService){
-    this._authenticationService= authenticationService;
-  }
+  constructor(private _authenticationService: AuthenticationService ){}
 
   private checkNull(){
     var isNull = false;
@@ -115,14 +111,7 @@ export class RegisterComponent {
       confirmPassword: this.registerUserForm.value.confirmPassword!
     }
     this._authenticationService.registerUser(user)
-        .subscribe({
-          next: res=> {
-            alert("User registered successfully.");
-          },
-          error: err=>{
-            alert("Something went wrong. Please Try again.");
-          }
-        })
+       
   }
 
 }

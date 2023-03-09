@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginUser } from 'src/app/interface/loginUser.interface';
@@ -10,9 +10,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent{
-
-  private _authenticationService!: AuthenticationService;
-
   passwordError = false;
   usernameError = false;
   
@@ -30,12 +27,7 @@ export class LoginComponent{
     return this.loginUserForm.get('password');
   }
 
-  constructor(
-     authenticationService : AuthenticationService,
-     private router: Router
-    ){
-    this._authenticationService = authenticationService;
-  }
+  constructor(private _authenticationService : AuthenticationService ){}
   
   private checkNull():boolean{
     let isNull = false;
@@ -58,16 +50,7 @@ export class LoginComponent{
       password: this.loginUserForm.value.password!,
     }
     this._authenticationService.loginUser(user)
-        .subscribe({
-          next: res=> {
-            alert("Login successfully.");
-            sessionStorage.setItem('authToken', res);
-            this.router.navigate(['/dashboard']);
-          },
-          error: err=>{
-            alert("Error! " + err.error);
-          }
-        })
+       
   }
 
   
