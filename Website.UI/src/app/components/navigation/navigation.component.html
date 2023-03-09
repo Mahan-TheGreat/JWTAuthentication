@@ -1,0 +1,12 @@
+<p-tabMenu [model]="items">
+    <!-- <span *ngFor="let item of items">
+        <span *ngIf="item.visible">
+            {{item.label}}
+        </span>
+    </span> -->
+    <ng-template pTemplate="item" let-item let-i="index" >
+        <span *ngIf="item.visible">
+            {{item.label}}
+        </span>
+    </ng-template>
+</p-tabMenu>
