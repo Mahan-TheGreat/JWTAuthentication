@@ -1,8 +1,6 @@
-﻿using JWTAuthentication.Entities;
+﻿namespace JWTAuthentication.Entities;
 
-namespace JWTAuthentication.Models;
-
-public class LoggedInUser: BaseEntity
+public class UserSession : BaseEntity
 {
     public string SessionId { get; set; } = string.Empty;
 
@@ -11,5 +9,5 @@ public class LoggedInUser: BaseEntity
     public DateTime SessionStart { get; set; }
 
     public DateTime? SessionEnd { get; set; }
-    
+
 }

@@ -1,5 +1,5 @@
-﻿using JWTAuthentication.Infrastructure;
-using JWTAuthentication.Models;
+﻿using JWTAuthentication.Entities;
+using JWTAuthentication.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

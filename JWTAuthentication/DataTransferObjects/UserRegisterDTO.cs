@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JWTAuthentication.Models;
+namespace JWTAuthentication.DataTransferObjects;
 
 public class UserRegisterDTO
 {

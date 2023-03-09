@@ -1,4 +1,4 @@
-﻿using JWTAuthentication.Models;
+﻿using JWTAuthentication.Entities;
 
 namespace JWTAuthentication.Infrastructure;
 

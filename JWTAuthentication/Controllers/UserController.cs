@@ -1,4 +1,5 @@
-﻿using JWTAuthentication.Entities;
+﻿using JWTAuthentication.DataTransferObjects;
+using JWTAuthentication.Entities;
 using JWTAuthentication.Helper;
 using JWTAuthentication.Infrastructure;
 using JWTAuthentication.Models;
