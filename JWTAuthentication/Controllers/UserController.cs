@@ -1,13 +1,10 @@
 ﻿using JWTAuthentication.Entities;
+using JWTAuthentication.Helper;
 using JWTAuthentication.Infrastructure;
 using JWTAuthentication.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace JWTAuthentication.Controllers;
@@ -19,16 +16,22 @@ public class UserController : ControllerBase
 {
     private ApplicationDBContext _Context;
     private IConfiguration _configuration;
+    private TokenHelper _tokenHelper;
 
 
-    public UserController(ApplicationDBContext Context, IConfiguration configuration)
+    public UserController(
+        ApplicationDBContext Context,
+        IConfiguration configuration
+        )
     {
-
+       
         _Context = Context;
         _configuration = configuration;
-    }
+       _tokenHelper = new TokenHelper(_configuration);
 
-    [HttpGet]
+}
+
+[HttpGet]
     public async Task<List<User>> GetUsers()
     {
         return await _Context.Users.ToListAsync();
@@ -52,7 +55,7 @@ public class UserController : ControllerBase
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             UserRole = user.UserRole,
-            VerificationToken = CreateRandomToken()
+            VerificationToken = _tokenHelper.CreateRandomToken()
         };
 
         _Context.Users.Add(registerUser);
@@ -80,15 +83,65 @@ public class UserController : ControllerBase
         {
             return BadRequest("Password do not match.");
         }
-        string token = CreateJwtToken(user);
+        string token = _tokenHelper.CreateJwtToken(user);
 
-        var refreshToken = GenerateRefreshToken();
+        var refreshToken = _tokenHelper.GenerateRefreshToken();
         SetRefreshToken(user, refreshToken);
+        SetUserSession(user);
         return Ok(token);
 
     }
 
+    private async void SetUserSession(User user)
+    {
+        LoggedInUser User = new LoggedInUser();
 
+        User.SessionId = _tokenHelper.CreateRandomToken();
+        User.UserId = user.Id;
+        User.SessionStart = DateTime.Now;
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+        };
+
+        await _Context.SessionHistory.AddAsync(User);
+        await _Context.SaveChangesAsync();
+
+        Response.Cookies.Append("sessionId", User.SessionId.ToString(), cookieOptions);
+
+    }
+
+    [HttpGet("Sessionhistory"), Authorize(Roles = "Admin")]
+    private async Task<List<LoggedInUser>> GetUserSession()
+    {
+        var sessions = await _Context.SessionHistory.ToListAsync();
+        return sessions;
+    }
+
+    [HttpPost("Logout"), Authorize]
+    public  OkObjectResult Logout(int id)
+    {
+             EndUserSession();
+             RemoveRefreshToken(id);
+            return Ok(new
+            {
+             Message = "User logged out."
+            });
+    }
+
+
+    private async void EndUserSession()
+    {
+        if (Request.Cookies["sessionId"] != null)
+        {
+            string sessionId = Request.Cookies["sessionId"]!;
+            var session = await _Context.SessionHistory.FirstAsync(x => x.SessionId == sessionId);
+            session.SessionEnd = DateTime.Now;
+            await _Context.SaveChangesAsync();
+        }
+    
+    }
     private async Task<IActionResult> VerifyUser(string token)
     {
 
@@ -116,7 +169,7 @@ public class UserController : ControllerBase
         {
             return BadRequest("User not found!");
         }
-        user.PasswordResetToken = CreateRandomToken();
+        user.PasswordResetToken = _tokenHelper.CreateRandomToken();
         user.ResetTokenExpires = DateTime.Now.AddHours(1);
         await _Context.SaveChangesAsync();
 
@@ -174,37 +227,7 @@ public class UserController : ControllerBase
         }
     }
 
-    private string CreateJwtToken(User user)
-    {
 
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:Token").Value));
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                 new Claim(ClaimTypes.Name, user.UserName),
-                 new Claim(ClaimTypes.Role, user.UserRole),
-                 new Claim("aud","http://localhost:7130"),
-                 new Claim("aud","http://localhost:4200"),
-                 
-            }),
-            Issuer = "https://localhost:7130",
-            Expires = DateTime.UtcNow.AddHours(1),
-            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature)
-    };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        var jwt = tokenHandler.WriteToken(token);
-
-        return jwt;
-
-    }
 
     [HttpPost("RefreshToken"), Authorize]
 
@@ -225,23 +248,13 @@ public class UserController : ControllerBase
             return Unauthorized("Token has expired.");
         }
 
-        string token = CreateJwtToken(user);
-        var newRefreshToken = GenerateRefreshToken();
+        string token = _tokenHelper.CreateJwtToken(user);
+        var newRefreshToken = _tokenHelper.GenerateRefreshToken();
         SetRefreshToken(user, newRefreshToken);
 
         return Ok(token);
     }
 
-    private RefreshToken GenerateRefreshToken()
-    {
-        var refreshToken = new RefreshToken
-        {
-            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            ExpiresAt = DateTime.UtcNow.AddDays(1),
-            CreatedAt = DateTime.Now
-        };
-        return refreshToken;
-    }
 
     private async void SetRefreshToken(User user,RefreshToken refreshToken)
     {
@@ -257,9 +270,14 @@ public class UserController : ControllerBase
         await _Context.SaveChangesAsync();
     }
 
-    private string CreateRandomToken()
+    private async void RemoveRefreshToken(int userId)
     {
-        return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        User user = await _Context.Users.FirstAsync(u => u.Id == userId);
+        user.RefreshToken = null;
+        user.RefreshTokenCreated = null;
+        user.RefreshTokenExpires = null;
+        Response.Cookies.Delete("refreshToken");
+        await _Context.SaveChangesAsync();
     }
 
 }
