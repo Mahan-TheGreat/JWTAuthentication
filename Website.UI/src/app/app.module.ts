@@ -18,29 +18,36 @@ import { NgModule } from '@angular/core';
 import { AuthInterceptor } from './services/Auth.Interceptor';
 import { AuthGuard } from './services/AuthGuard';
 import { AdminAuthGuard } from './services/AdminAuthGuard';
-
+import {TabMenuModule} from 'primeng/tabmenu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { LoginGuard } from './services/LoginGuard';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    AdmindashboardComponent
+    AdmindashboardComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    TabMenuModule
   ],
   providers: [
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     AuthGuard,
-    AdminAuthGuard
+    AdminAuthGuard,
+    LoginGuard
   ],
   bootstrap: [AppComponent]
 })
