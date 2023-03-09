@@ -1,3 +1,4 @@
+using JWTAuthentication.Helper;
 using JWTAuthentication.Infrastructure;
 using JWTAuthentication.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IApplicationDBContext, ApplicationDBContext>();
 builder.Services.AddScoped<ApplicationDBInitializer>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenHelper, TokenHelper>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
