@@ -49,6 +49,5 @@ export class NavigationComponent implements OnInit{
       this.isLoggedIn = false;
       this._authenticationService.logOut();
       this.updateNavItems();
-      this.router.navigate(['/login']);
     }
 }
