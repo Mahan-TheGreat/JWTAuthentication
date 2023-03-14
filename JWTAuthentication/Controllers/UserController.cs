@@ -32,7 +32,7 @@ public class UserController : ControllerBase
 
 }
 
-[HttpGet]
+    [HttpGet]
     public async Task<List<User>> GetUsers()
     {
         return await _Context.Users.ToListAsync();
@@ -95,7 +95,7 @@ public class UserController : ControllerBase
 
     private async void SetUserSession(User user)
     {
-        LoggedInUser User = new LoggedInUser();
+        UserSession User = new UserSession();
 
         User.SessionId = _tokenHelper.CreateRandomToken();
         User.UserId = user.Id;
@@ -114,21 +114,30 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("Sessionhistory"), Authorize(Roles = "Admin")]
-    private async Task<List<LoggedInUser>> GetUserSession()
+    public async Task<List<UserSession>> GetUserSession()
     {
         var sessions = await _Context.SessionHistory.ToListAsync();
         return sessions;
     }
 
-    [HttpPost("Logout"), Authorize]
-    public  OkObjectResult Logout(int id)
+    [HttpPost("logout"), Authorize]
+    public IActionResult Logout(int id)
     {
-             EndUserSession();
-             RemoveRefreshToken(id);
+            string sessionId = Request.Cookies["sessionId"]!;
+        if(sessionId != null)
+        {
+            EndUserSession();
+            RemoveRefreshToken(id);
             return Ok(new
             {
-             Message = "User logged out."
+                Message = "User logged out."
             });
+        }
+        else
+        {
+            return BadRequest();
+        }
+           
     }
 
 
@@ -136,9 +145,10 @@ public class UserController : ControllerBase
     {
         if (Request.Cookies["sessionId"] != null)
         {
-            string sessionId = Request.Cookies["sessionId"]!;
+            var sessionId = Request.Cookies["sessionId"]!;
             var session = await _Context.SessionHistory.FirstAsync(x => x.SessionId == sessionId);
             session.SessionEnd = DateTime.Now;
+            Response.Cookies.Delete("sessionId");
             await _Context.SaveChangesAsync();
         }
     
@@ -274,6 +284,10 @@ public class UserController : ControllerBase
     private async void RemoveRefreshToken(int userId)
     {
         User user = await _Context.Users.FirstAsync(u => u.Id == userId);
+        if(user == null)
+        {
+            return;
+        };
         user.RefreshToken = null;
         user.RefreshTokenCreated = null;
         user.RefreshTokenExpires = null;
