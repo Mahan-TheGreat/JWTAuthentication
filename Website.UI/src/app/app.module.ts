@@ -22,6 +22,7 @@ import {TabMenuModule} from 'primeng/tabmenu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { LoginGuard } from './services/LoginGuard';
+import { BnNgIdleService } from 'bn-ng-idle';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,8 @@ import { LoginGuard } from './services/LoginGuard';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     AuthGuard,
     AdminAuthGuard,
-    LoginGuard
+    LoginGuard,
+    BnNgIdleService
   ],
   bootstrap: [AppComponent]
 })
