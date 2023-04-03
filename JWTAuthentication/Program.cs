@@ -51,13 +51,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidIssuer = builder.Configuration.GetSection("JWT:Issuer").Value,
-            ValidAudiences = new[]{"https://localhost:7130","http://localhost:4200"},
+            ValidAudiences = new[] { "https://localhost:7130", "http://localhost:4200" },
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
             //ValidAudiences = new[] { "https://localhost:4200", "https://localhost:7130" }
 
 
         };
+    })
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     });
+
+
 
 
 var app = builder.Build();
